@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Edit Note {% endblock %}
+{% block navbar %} {{ super() }} {% endblock %}
+
+{% block content %}
+
+    <form action="" method="POST">
+        {{ wtf.quick_form(form) }}
+    </form>
+    
+{% endblock %}

@@ -8,4 +8,19 @@
 
     <h1>Home Page</h1>
 
+    <ul class="user-notes">
+        {% for note in current_user.notes %}
+        <li class="list-user-notes"> {{ note.data }} 
+            <a href="/{{ note.id }}/edit">Edit</a>
+            <form action="/{{ note.id }}/delete" method="POST">
+                <button type="submit">Delete</button>
+            </form> 
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="" method="POST">
+        {{ wtf.quick_form(form) }}
+    </form>
+
 {% endblock %}
