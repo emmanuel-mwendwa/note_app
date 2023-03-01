@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Unconfirmed Account {% endblock %}
+{% block navbar %} {{ super() }} {% endblock %}
+
+{% block content %}
+
+    <p>Sorry but your account is not yet confirmed.</p>
+    <p>You need to confirm your account to access this site.</p>
+    <p>To generate another account confirmation link <a href="{{ url_for('auth.resend_confirmation') }}">click here</a></p>
+
+{% endblock %}

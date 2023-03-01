@@ -1,0 +1,11 @@
+Dear {{ user.firstName }}
+
+Welcome to the best Note application
+To confirm your account click on the following link:
+
+{{ url_for('auth.confirm', token=token, _external=True) }}
+
+This token will expire in 1 hour
+
+Sincerely,
+Manu 😀.

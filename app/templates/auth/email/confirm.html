@@ -1,0 +1,12 @@
+<p> {{ user.firstName }} </p>
+
+<p>To confirm your account <a href="{{ url_for('auth.confirm', token=token, _external=True) }}"> Click Here</a></p> 
+    
+<p>Alternatively click on the following link: </p>
+
+<p>{{ url_for('auth.confirm', token=token, _external=True) }} </p>
+
+<p>This token will expire in 1 hour</p>
+
+<p>Sincerely,</p>
+<p>Manu 😀.</p>

@@ -1,8 +1,10 @@
 from . import db, login_manager
+from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import func
 import datetime
+import jwt
 
 
 class Note(db.Model):
@@ -22,6 +24,7 @@ class User(db.Model, UserMixin):
     lastName = db.Column(db.String(56))
     email = db.Column(db.String(56))
     password_hash = db.Column(db.String(128))
+    confirmed = db.Column(db.Boolean, default=False)
     notes = db.relationship('Note', backref='note')
 
     @property
@@ -34,6 +37,33 @@ class User(db.Model, UserMixin):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def generate_confirmation_token(self, expiration=3600):
+        confirmation_token = jwt.encode({
+            'confirm': self.id,
+            'exp': datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(seconds=expiration)
+        },
+        current_app.config['SECRET_KEY'],
+        algorithm = 'HS256'
+        )
+        return confirmation_token
+
+    def confirm(self, token):
+        try:
+            data = jwt.decode(
+                token,
+                current_app.config['SECRET_KEY'],
+                leeway = datetime.timedelta(seconds=10),
+                algorithms=['HS256']
+            )
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
+
     
 
 @login_manager.user_loader
